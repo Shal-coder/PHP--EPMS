@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayrollPro - Modern Payroll Management System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0b1320; color: #e6edf5; line-height: 1.6; }
+        
+        /* Header */
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; border-bottom: 1px solid rgba(255,255,255,.05); position: fixed; top: 0; left: 0; right: 0; background: rgba(11,19,32,.95); backdrop-filter: blur(10px); z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #0b1320; font-size: 18px; }
+        .logo-text { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+        .logo-text span { color: #22c55e; }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { color: #9fb4c7; text-decoration: none; font-weight: 600; font-size: 15px; transition: color .2s; }
+        .nav-links a:hover { color: #fff; }
+        .header-btn { padding: 10px 24px; background: linear-gradient(135deg, #22c55e, #16a34a); color: #0b1320; border-radius: 8px; text-decoration: none; font-weight: 700; transition: all .3s; }
+        .header-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(34,197,94,.3); }
+        
+        /* Hero Section */
+        .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 48px 80px; background: radial-gradient(circle at 20% 20%, rgba(34,197,94,.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(59,130,246,.08), transparent 40%); }
+        .hero-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .hero-text { }
+        .badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3); border-radius: 50px; font-size: 13px; color: #86efac; font-weight: 600; margin-bottom: 24px; }
+        .badge-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        .hero h1 { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 24px; letter-spacing: -1px; }
+        .hero h1 span { background: linear-gradient(135deg, #22c55e, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-desc { font-size: 18px; color: #9fb4c7; margin-bottom: 36px; max-width: 500px; }
+        .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+        .btn-primary { padding: 16px 32px; background: linear-gradient(135deg, #22c55e, #16a34a); color: #0b1320; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 16px; transition: all .3s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(34,197,94,.35); }
+</style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">P</div>
+            <div class="logo-text">Payroll<span>Pro</span></div>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#features">Features</a>
+            <a href="support.php">Support</a>
+            <a href="announcement.php">Announcements</a>
+            <a href="faqs.html">FAQs</a>
+        </nav>
+        <a href="../login.php" class="header-btn">Sign In</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="badge"><span class="badge-dot"></span> Modern Payroll Solution</div>
+                <h1>Simplify Your <span>Payroll</span> Management</h1>
+                <p class="hero-desc">Streamline employee payments, track attendance, manage deductions and allowances — all in one powerful, easy-to-use platform.</p>
+                <div class="hero-btns">
+                    <a href="../login.php" class="btn-primary">🚀 Get Started</a>
+                    <a href="#features" class="btn-secondary">Learn More →</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="preview-header">
+                        <div class="preview-dots"><span></span><span></span><span></span></div>
+                        <span>Dashboard Preview</span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-stat"><div class="stat-icon green">👥</div><div><p class="stat-label">Employees</p><p class="stat-value">248</p></div></div>
+                        <div class="preview-stat"><div class="stat-icon blue">✓</div><div><p class="stat-label">Present Today</p><p class="stat-value">231</p></div></div>
+                        <div class="preview-stat"><div class="stat-icon yellow">💰</div><div><p class="stat-label">Monthly Payroll</p><p class="stat-value">$847K</p></div></div>
+                        <div class="preview-stat"><div class="stat-icon purple">📊</div><div><p class="stat-label">Departments</p><p class="stat-value">12</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <p class="section-badge">Features</p>
+                <h2>Everything You Need to Manage Payroll</h2>
+                <p class="section-desc">Powerful tools designed to make payroll processing effortless and accurate.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon green">👥</div>
+                    <h3>Employee Management</h3>
+                    <p>Easily add, update, and manage employee records with comprehensive profiles and role assignments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon blue">📅</div>
+                    <h3>Attendance Tracking</h3>
+                    <p>Automatic attendance logging with real-time present/absent tracking and monthly reports.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon yellow">💵</div>
+                    <h3>Salary Calculation</h3>
+                    <p>Automated salary computation based on attendance, allowances, and deductions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon purple">🏢</div>
+                    <h3>Department Structure</h3>
+                    <p>Organize your workforce with departments, positions, and hierarchical management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon cyan">📊</div>
+                    <h3>Payroll Reports</h3>
+                    <p>Generate detailed payroll summaries with breakdowns of earnings and deductions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon pink">🔐</div>
+                    <h3>Role-Based Access</h3>
+                    <p>Secure access control with Admin, Manager, and Employee permission levels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-item"><p class="stat-number">10K+</p><p class="stat-text">Employees Managed</p></div>
+            <div class="stat-item"><p class="stat-number">500+</p><p class="stat-text">Companies Trust Us</p></div>
+            <div class="stat-item"><p class="stat-number">99.9%</p><p class="stat-text">Uptime Guaranteed</p></div>
+            <div class="stat-item"><p class="stat-number">24/7</p><p class="stat-text">Support Available</p></div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>Ready to Streamline Your Payroll?</h2>
+            <p>Join thousands of companies that trust PayrollPro for their payroll management needs.</p>
+            <a href="../login.php" class="btn-primary">🚀 Start Now — It's Free</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">P</div>
+                    <div class="logo-text">Payroll<span>Pro</span></div>
+                </div>
+                <p>Modern payroll management for modern businesses.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="faqs.html">FAQs</a>
+                    <a href="support.php">Support</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="announcement.php">Announcements</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Access</h4>
+                    <a href="../login.php">Login</a>
+                    <a href="../login.php">Admin Portal</a>
+                    <a href="../login.php">Employee Portal</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 PayrollPro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <style>
+        .btn-secondary { padding: 16px 32px; background: transparent; border: 1px solid rgba(255,255,255,.2); color: #e6edf5; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px; transition: all .3s; }
+        .btn-secondary:hover { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.05); }
+        
+        /* Hero Visual */
+        .hero-visual { display: flex; justify-content: center; }
+        .dashboard-preview { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; overflow: hidden; width: 100%; max-width: 450px; box-shadow: 0 25px 50px rgba(0,0,0,.4); }
+        .preview-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255,255,255,.03); border-bottom: 1px solid rgba(255,255,255,.06); font-size: 13px; color: #9fb4c7; }
+        .preview-dots { display: flex; gap: 6px; }
+        .preview-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.15); }
+        .preview-dots span:first-child { background: #ef4444; }
+        .preview-dots span:nth-child(2) { background: #fbbf24; }
+        .preview-dots span:last-child { background: #22c55e; }
+        .preview-content { padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .preview-stat { display: flex; align-items: center; gap: 12px; padding: 16px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: 12px; }
+        .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .stat-icon.green { background: rgba(34,197,94,.15); }
+        .stat-icon.blue { background: rgba(59,130,246,.15); }
+        .stat-icon.yellow { background: rgba(251,191,36,.15); }
+        .stat-icon.purple { background: rgba(139,92,246,.15); }
+        .stat-label { font-size: 12px; color: #9fb4c7; margin-bottom: 2px; }
+        .stat-value { font-size: 20px; font-weight: 800; }
+
+        /* Features Section */
+        .features { padding: 100px 48px; background: linear-gradient(180deg, #0b1320 0%, #0f1a2b 100%); }
+        .features-container { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-badge { display: inline-block; padding: 8px 16px; background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.3); border-radius: 50px; font-size: 13px; color: #93c5fd; font-weight: 600; margin-bottom: 16px; }
+        .section-header h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+        .section-desc { font-size: 18px; color: #9fb4c7; max-width: 600px; margin: 0 auto; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .feature-card { padding: 32px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; transition: all .3s; }
+        .feature-card:hover { border-color: rgba(34,197,94,.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.3); }
+        .feature-icon { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 20px; }
+        .feature-icon.green { background: rgba(34,197,94,.15); }
+        .feature-icon.blue { background: rgba(59,130,246,.15); }
+        .feature-icon.yellow { background: rgba(251,191,36,.15); }
+        .feature-icon.purple { background: rgba(139,92,246,.15); }
+        .feature-icon.cyan { background: rgba(6,182,212,.15); }
+        .feature-icon.pink { background: rgba(236,72,153,.15); }
+        .feature-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .feature-card p { color: #9fb4c7; font-size: 15px; }
+        
+        /* Stats Section */
+        .stats-section { padding: 80px 48px; background: rgba(34,197,94,.05); border-top: 1px solid rgba(34,197,94,.1); border-bottom: 1px solid rgba(34,197,94,.1); }
+        .stats-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; text-align: center; }
+        .stat-number { font-size: 48px; font-weight: 800; background: linear-gradient(135deg, #22c55e, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-text { font-size: 16px; color: #9fb4c7; margin-top: 8px; }
+        
+        /* CTA Section */
+        .cta-section { padding: 100px 48px; text-align: center; background: radial-gradient(circle at 50% 50%, rgba(34,197,94,.1), transparent 60%); }
+        .cta-container { max-width: 600px; margin: 0 auto; }
+        .cta-container h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
+        .cta-container p { font-size: 18px; color: #9fb4c7; margin-bottom: 32px; }
+        
+        /* Footer */
+        .footer { padding: 60px 48px 0; border-top: 1px solid rgba(255,255,255,.05); }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 2fr; gap: 60px; padding-bottom: 40px; }
+        .footer-brand p { color: #9fb4c7; margin-top: 16px; max-width: 280px; }
+        .footer-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .footer-col h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #9fb4c7; margin-bottom: 16px; }
+        .footer-col a { display: block; color: #c9d7e6; text-decoration: none; font-size: 15px; margin-bottom: 10px; transition: color .2s; }
+        .footer-col a:hover { color: #22c55e; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,.05); padding: 20px 0; text-align: center; color: #6b7c93; font-size: 14px; }
+        
+        /* Responsive */
+        @media (max-width: 1024px) { .hero-content, .features-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 42px; } .features-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .header { padding: 16px 24px; } .nav-links { display: none; } .hero { padding: 100px 24px 60px; } .hero h1 { font-size: 32px; } .features { padding: 60px 24px; } .features-grid { grid-template-columns: 1fr; } .stats-container { grid-template-columns: repeat(2, 1fr); } .footer-container { grid-template-columns: 1fr; } .footer-links { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</body>
+</html>

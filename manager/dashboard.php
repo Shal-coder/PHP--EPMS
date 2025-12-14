@@ -1,0 +1,243 @@
+<?php
+/**
+ * Manager Dashboard - Modern Design
+ */
+
+require_once __DIR__ . '/../app/Middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../app/Middleware/RoleMiddleware.php';
+require_once __DIR__ . '/../app/Models/Employee.php';
+require_once __DIR__ . '/../app/Models/Attendance.php';
+require_once __DIR__ . '/../app/Models/Leave.php';
+
+RoleMiddleware::require('manager');
+
+$user = AuthMiddleware::user();
+$today = date('Y-m-d');
+
+// Get employees under this manager
+$myEmployees = Employee::getByManager($user->id);
+$totalEmp = count($myEmployees);
+
+// Get today's attendance for my team
+$todayAttendance = Attendance::getByDate($today, $user->id);
+$countPresent = count(array_filter($todayAttendance, fn($a) => $a['status'] === 'present'));
+$absent = $totalEmp - $countPresent;
+$percent = $totalEmp > 0 ? round(100 * $countPresent / $totalEmp, 1) : 0;
+
+// Get pending leaves for my team
+$pendingLeaves = Leave::getPending($user->id);
+$pendingCount = count($pendingLeaves);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard | PayrollPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0b1320; color: #e6edf5; min-height: 100vh; }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,.3); } 50% { box-shadow: 0 0 40px rgba(139,92,246,.6); } }
+        
+        .shell { min-height: 100vh; display: flex; flex-direction: column; background: radial-gradient(circle at 15% 20%, rgba(139,92,246,.15), transparent 35%), radial-gradient(circle at 80% 10%, rgba(167,139,250,.12), transparent 38%), radial-gradient(circle at 50% 80%, rgba(124,58,237,.08), transparent 40%), #0b1320; position: relative; overflow-x: hidden; }
+        .shell::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 300px; background: linear-gradient(180deg, rgba(139,92,246,.05), transparent); pointer-events: none; }
+        
+        .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(11,19,32,.95); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+        .brand { font-weight: 800; letter-spacing: .08em; font-size: 16px; padding: 10px 14px; border-radius: 10px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; box-shadow: 0 4px 12px rgba(139,92,246,.4); transition: all .3s; }
+        .brand:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139,92,246,.5); }
+        .links { display: flex; gap: 8px; }
+        .links a { color: #c9d7e6; text-decoration: none; padding: 8px 14px; font-weight: 600; font-size: 14px; border-radius: 8px; transition: all .3s; position: relative; }
+        .links a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: linear-gradient(90deg, #8b5cf6, #7c3aed); transition: width .3s; }
+        .links a:hover { background: rgba(255,255,255,.05); color: #fff; }
+        .links a:hover::after { width: 80%; }
+        .user-mini { display: inline-flex; gap: 8px; align-items: center; color: #c9d7e6; font-weight: 600; padding: 8px 14px; background: rgba(255,255,255,.06); border-radius: 10px; transition: all .3s; border: 1px solid rgba(255,255,255,.05); }
+        .user-mini:hover { background: rgba(255,255,255,.1); transform: translateY(-1px); }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #8b5cf6; animation: pulse 2s infinite; box-shadow: 0 0 10px rgba(139,92,246,.6); }
+        
+        .layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 70px); }
+        
+        .sidenav { border-right: 1px solid rgba(255,255,255,.08); padding: 20px; background: rgba(255,255,255,.02); animation: slideIn 0.5s ease-out; }
+        .user-card { display: flex; gap: 12px; align-items: center; padding: 16px; background: linear-gradient(135deg, rgba(139,92,246,.12), rgba(167,139,250,.08)); border: 1px solid rgba(139,92,246,.25); border-radius: 14px; margin-bottom: 20px; transition: all .4s; position: relative; overflow: hidden; }
+        .user-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,.03), transparent); animation: shimmer 3s infinite; }
+        .user-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139,92,246,.25); border-color: rgba(139,92,246,.4); }
+        .avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #8b5cf6, #7c3aed); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; color: #fff; box-shadow: 0 4px 12px rgba(139,92,246,.4); transition: all .3s; }
+        .user-card:hover .avatar { transform: scale(1.05); box-shadow: 0 6px 16px rgba(139,92,246,.5); }
+        .user-card .label { margin: 0; font-size: 11px; color: #c4b5fd; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
+        .user-card .name { margin: 4px 0 0; font-weight: 700; font-size: 15px; }
+        
+        nav { display: flex; flex-direction: column; gap: 6px; }
+        .nav-link { padding: 12px 16px; border-radius: 10px; text-decoration: none; color: #c9d7e6; font-weight: 600; border: 1px solid transparent; transition: all .3s; display: flex; align-items: center; gap: 10px; position: relative; }
+        .nav-link::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 0; height: 60%; background: linear-gradient(90deg, #8b5cf6, transparent); border-radius: 0 4px 4px 0; transition: width .3s; }
+        .nav-link:hover { background: rgba(255,255,255,.05); color: #fff; transform: translateX(4px); }
+        .nav-link:hover::before { width: 4px; }
+        .nav-link.active { background: rgba(139,92,246,.14); color: #c4b5fd; border-color: rgba(139,92,246,.28); box-shadow: 0 4px 12px rgba(139,92,246,.15); }
+        .nav-link.active::before { width: 4px; }
+        .nav-icon { width: 20px; text-align: center; font-size: 18px; }
+        
+        .main { padding: 32px; overflow-y: auto; animation: fadeIn 0.6s ease-out; position: relative; }
+        
+        .page-header { margin-bottom: 32px; animation: fadeInUp 0.6s ease-out; }
+        .page-header h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; background: linear-gradient(135deg, #c4b5fd, #8b5cf6, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .page-header .lede { color: #9fb4c7; font-size: 16px; }
+        
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .metric-card { padding: 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); background: linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); backdrop-filter: blur(10px); transition: all .4s; position: relative; overflow: hidden; animation: fadeInUp 0.6s ease-out; animation-fill-mode: both; }
+        .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, currentColor, transparent); opacity: 0; transition: opacity .3s; }
+        .metric-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.3); border-color: rgba(255,255,255,.15); }
+        .metric-card:hover::before { opacity: 0.6; }
+        .metric-card:nth-child(1) { animation-delay: 0.1s; }
+        .metric-card:nth-child(2) { animation-delay: 0.2s; }
+        .metric-card:nth-child(3) { animation-delay: 0.3s; }
+        .metric-card:nth-child(4) { animation-delay: 0.4s; }
+        .metric-card .label { color: #9fb4c7; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .metric-card .value { font-size: 36px; font-weight: 800; margin: 12px 0 6px; line-height: 1; }
+        .metric-card .hint { color: #64748b; font-size: 13px; font-weight: 500; }
+        .metric-card.purple { color: #c4b5fd; }
+        .metric-card.purple .value { color: #c4b5fd; text-shadow: 0 0 20px rgba(139,92,246,.3); }
+        .metric-card.red { color: #fca5a5; }
+        .metric-card.red .value { color: #fca5a5; text-shadow: 0 0 20px rgba(239,68,68,.3); }
+        .metric-card.blue { color: #93c5fd; }
+        .metric-card.blue .value { color: #93c5fd; text-shadow: 0 0 20px rgba(59,130,246,.3); }
+        .metric-card.yellow { color: #fde047; }
+        .metric-card.yellow .value { color: #fde047; text-shadow: 0 0 20px rgba(251,191,36,.3); }
+        
+        .alert-box { background: linear-gradient(135deg, rgba(251,191,36,.15), rgba(245,158,11,.1)); border: 1px solid rgba(251,191,36,.3); border-radius: 16px; padding: 20px 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; gap: 20px; transition: all .4s; animation: fadeInUp 0.6s ease-out 0.5s both; position: relative; overflow: hidden; }
+        .alert-box::before { content: '⚠️'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 64px; opacity: 0.05; }
+        .alert-box:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(251,191,36,.2); border-color: rgba(251,191,36,.4); }
+        .alert-box strong { color: #fde047; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .alert-box p { color: #9fb4c7; font-size: 14px; margin-top: 6px; }
+        .alert-box a { padding: 12px 24px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; text-decoration: none; border-radius: 10px; font-weight: 700; transition: all .3s; box-shadow: 0 4px 12px rgba(251,191,36,.3); }
+        .alert-box a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(251,191,36,.4); }
+        
+        .quick-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; animation: fadeInUp 0.6s ease-out 0.6s both; }
+        .tile { display: block; padding: 28px; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); background: linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); color: #e6edf5; text-decoration: none; transition: all .4s; position: relative; overflow: hidden; }
+        .tile::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #8b5cf6, #7c3aed); transform: scaleX(0); transition: transform .3s; }
+        .tile:hover { border-color: rgba(139,92,246,.4); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(139,92,246,.2); }
+        .tile:hover::before { transform: scaleX(1); }
+        .tile-icon { font-size: 36px; margin-bottom: 16px; display: inline-block; transition: all .3s; }
+        .tile:hover .tile-icon { transform: scale(1.1) rotate(5deg); }
+        .tile-title { font-weight: 700; font-size: 17px; margin-bottom: 10px; color: #c4b5fd; }
+        .tile p { color: #9fb4c7; font-size: 14px; line-height: 1.6; }
+        
+        @media (max-width: 900px) { 
+            .layout { grid-template-columns: 1fr; } 
+            .sidenav { border-right: none; border-bottom: 1px solid rgba(255,255,255,.05); } 
+            .links { display: none; }
+            .alert-box { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <div class="brand">PayrollPro</div>
+            <div class="links">
+                <a href="../front_end/index.html">Home</a>
+                <a href="../front_end/support.php">Support</a>
+                <a href="../front_end/announcement.php">News</a>
+            </div>
+            <div class="user-mini"><span class="dot"></span><span><?= htmlspecialchars($user->getFullName()) ?></span></div>
+        </header>
+
+        <div class="layout">
+            <aside class="sidenav">
+                <div class="user-card">
+                    <div class="avatar"><?= strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) ?></div>
+                    <div>
+                        <p class="label">Manager</p>
+                        <p class="name"><?= htmlspecialchars($user->getFullName()) ?></p>
+                    </div>
+                </div>
+                <nav>
+                    <a class="nav-link active" href="dashboard.php"><span class="nav-icon">📊</span> Dashboard</a>
+                    <a class="nav-link" href="employees.php"><span class="nav-icon">👥</span> My Team</a>
+                    <a class="nav-link" href="payroll.php"><span class="nav-icon">💰</span> Team Payroll</a>
+                    <a class="nav-link" href="salary.php"><span class="nav-icon">💵</span> My Salary</a>
+                    <a class="nav-link" href="attendance.php"><span class="nav-icon">📋</span> Attendance</a>
+                    <a class="nav-link" href="leaves.php"><span class="nav-icon">📅</span> Leave Requests</a>
+                    <a class="nav-link" href="../front_end/announcement.php"><span class="nav-icon">📢</span> Announcements</a>
+                    <a class="nav-link" href="../logout.php"><span class="nav-icon">🚪</span> Logout</a>
+                </nav>
+            </aside>
+
+            <main class="main">
+                <div class="page-header">
+                    <div>
+                        <h1>👋 Welcome, <?= htmlspecialchars($user->first_name) ?>!</h1>
+                        <p class="lede">Here's your team's status for today, <?= date('F d, Y') ?>.</p>
+                    </div>
+                </div>
+
+                <section class="metrics-grid">
+                    <article class="metric-card purple">
+                        <p class="label">✓ Present Today</p>
+                        <p class="value"><?= $countPresent ?></p>
+                        <p class="hint">Team members checked in</p>
+                    </article>
+                    <article class="metric-card red">
+                        <p class="label">✗ Absent</p>
+                        <p class="value"><?= $absent ?></p>
+                        <p class="hint">Not checked in yet</p>
+                    </article>
+                    <article class="metric-card blue">
+                        <p class="label">👥 Team Size</p>
+                        <p class="value"><?= $totalEmp ?></p>
+                        <p class="hint">Employees under you</p>
+                    </article>
+                    <article class="metric-card yellow">
+                        <p class="label">📊 Attendance Rate</p>
+                        <p class="value"><?= $percent ?>%</p>
+                        <p class="hint">Today's coverage</p>
+                    </article>
+                </section>
+
+                <?php if ($pendingCount > 0): ?>
+                <div class="alert-box">
+                    <div>
+                        <strong>⚠️ <?= $pendingCount ?> Pending Leave Request<?= $pendingCount > 1 ? 's' : '' ?></strong>
+                        <p>Review and approve your team's leave requests</p>
+                    </div>
+                    <a href="leaves.php">Review Now</a>
+                </div>
+                <?php endif; ?>
+
+                <section class="quick-links">
+                    <a class="tile" href="employees.php">
+                        <div class="tile-icon">👥</div>
+                        <div class="tile-title">My Team</div>
+                        <p>View and manage your team members and their profiles.</p>
+                    </a>
+                    <a class="tile" href="payroll.php">
+                        <div class="tile-icon">💰</div>
+                        <div class="tile-title">Team Payroll</div>
+                        <p>Manage allowances, deductions, and bonuses for your team.</p>
+                    </a>
+                    <a class="tile" href="salary.php">
+                        <div class="tile-icon">💵</div>
+                        <div class="tile-title">My Salary</div>
+                        <p>View your personal salary breakdown and payslips.</p>
+                    </a>
+                    <a class="tile" href="attendance.php">
+                        <div class="tile-icon">📋</div>
+                        <div class="tile-title">Attendance</div>
+                        <p>Track daily attendance and monitor absences.</p>
+                    </a>
+                    <a class="tile" href="leaves.php">
+                        <div class="tile-icon">📅</div>
+                        <div class="tile-title">Leave Requests</div>
+                        <p>Approve or reject leave applications from your team.</p>
+                    </a>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
