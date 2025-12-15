@@ -130,7 +130,8 @@ This will automatically:
 **To reset database:** Add `?reset=1` to the URL
 
 **4. Start using the system**
-```http://localhost/epms/index.php
+```
+http://localhost/epms/index.php
 ```
 
 ---
