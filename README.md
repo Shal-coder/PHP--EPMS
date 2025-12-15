@@ -476,7 +476,7 @@ LOCKOUT_DURATION=300
 4. Try resetting: `install.php?reset=1`
 
 ### 404 Errors
-- Ensure you're using the full path: `/payroll-management-system/...`
+- Ensure you're using the full path: `/epms/...`
 - Check file exists in the correct location
 
 ---
