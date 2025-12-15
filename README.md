@@ -136,7 +136,7 @@ You can install **PayrollPro**  by **downloading the ZIP** or using **Git**.
    - Open browser and go to:  
      ```
      http://localhost/epms/index.php
-     ```  ```
+     ```
 
 ---
 #### 1️⃣ Using Git 
