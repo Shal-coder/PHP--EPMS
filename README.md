@@ -7,7 +7,7 @@
 <p align="center"><strong>Modern Employee Payroll Management System</strong></p>
 <p align="center">A secure, feature-rich payroll system with role-based access control, automated salary calculations, and a stunning dark-themed UI built with PHP and MySQL.</p>
 
-<table style="margin: auto; width: 75%; text-align: center; 
+<table style="margin: auto; width: 50%; text-align: center; 
               font-family: Arial, sans-serif; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
   
   <tr style="background-color: #a29f9fff; color:black;">
