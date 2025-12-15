@@ -101,6 +101,45 @@
 
 ### Installation
 
+You can install **PayrollPro**  by **downloading the ZIP** or using **Git**.
+
+#### 1 Using ZIP download
+1. Download the project ZIP from the main branch:  
+   [📥 PayrollPro ZIP](https://github.com/Shal-coder/PHP--EPMS/blob/main/Payroll-Management-System.zip)  
+2. Extract the ZIP folder and rename it to `Payroll-Management-System`.  
+3. Move the `Payroll-Management-System` folder to your XAMPP `htdocs` directory:  
+   ```text
+   C:\xampp\htdocs\Payroll-Management-System
+4. **Start XAMPP**
+   - Open XAMPP Control Panel
+   - Start **Apache** and **MySQL**
+
+5. **Create the database**
+   - Open `http://localhost/phpmyadmin`
+   - Click **New**, enter database name: `payroll_pro`
+   - Set **Collation**: `utf8mb4_unicode_ci`
+   - Click **Create**
+
+6. **Run one-click installation**
+   - Open your browser and go to:  
+     ```
+     http://localhost/epms/install.php
+     ```
+   - This will automatically:
+     - Create all required tables
+     - Insert demo users and sample data
+     - Set up departments, allowances, deductions, bonuses, and attendance
+
+   **To reset the database:** Add `?reset=1` to the URL
+
+7. **Access the system**
+   - Open browser and go to:  
+     ```
+     http://localhost/epms/index.php
+     ```  ```
+
+---
+#### 1️⃣ Using Git 
 **1. Clone or download to your web server**
 ```bash
 cd c:\xampp\htdocs\
